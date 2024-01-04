@@ -59,6 +59,14 @@ This command will back up the 1Password vaults to the specified directory.
 
 This command will do the same as above but with detailed output.
 
+## Backup Structure
+
+The backups are stored in a hierarchical directory structure:
+
+- **Backup Directory (timestamped):** The root directory for the backup is named with the timestamp of when the backup process started (e.g., `2023-01-01-12-30-00` for a backup started at January 1, 2023, 12:30:00). This ensures each backup is in a unique directory.
+- **Vault Directories:** Within the backup directory, there's a subdirectory for each vault named after the vault itself.
+- **Item JSON Files:** Inside each vault's directory, there are JSON files for each item, named with the item's UUID (e.g., `2hj43298-2837.json`). Each file contains the complete item details in JSON format as retrieved from the 1Password CLI.
+
 ## Important Notes
 
 - Ensure you're logged into the 1Password CLI before running the script.
