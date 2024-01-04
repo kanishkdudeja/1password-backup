@@ -113,14 +113,6 @@ fi
 ## loop through the vaults array
 for vault in "${vaults[@]}"
 do
-  if [ "$vault" = "Shared" ]; then
-      # Skip this iteration.
-      continue
-  fi
-  if [ "$vault" = "Automattic" ]; then
-        # Skip this iteration.
-        continue
-    fi
    echo_info "Changing directory to backup directory: $backup_dir"
    cd "$tmp_dir/$backup_dir" || exit
 
