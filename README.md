@@ -33,7 +33,7 @@ The script sequentially processes each vault and item, saving the data to a desi
 To run the script, use the following syntax:
 
 ```bash
-backup-1password.sh --destination <path_to_backup_directory> [-v | --verbose]
+1password-backup.sh --destination <path_to_backup_directory> [-v | --verbose]
 ```
 
 ### Parameters:
@@ -46,7 +46,7 @@ backup-1password.sh --destination <path_to_backup_directory> [-v | --verbose]
 **Basic Usage:**
 
 ```bash
-backup-1password.sh --destination /path/to/backup
+1password-backup.sh --destination /path/to/backup
 ```
 
 This command will back up the 1Password vaults to the specified directory.
@@ -54,7 +54,7 @@ This command will back up the 1Password vaults to the specified directory.
 **Verbose Mode:**
    
 ```bash
-backup-1password.sh --destination /path/to/backup --verbose
+1password-backup.sh --destination /path/to/backup --verbose
 ```
 
 This command will do the same as above but with detailed output.
