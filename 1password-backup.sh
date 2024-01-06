@@ -33,7 +33,6 @@ echo_success() {
 }
 
 verbose=false
-tmp_dir=$(pwd)
 destination_dir=""
 
 # Loop through arguments and process them
@@ -97,16 +96,17 @@ fi
 echo_info "Vaults fetched: $(printf "%s, " "${vaults[@]}" | sed 's/, $//')"
 
 current_time=$(date '+%Y-%m-%d-%H-%M-%S')
-backup_dir="$current_time"
-echo_info "Attempting to create backup directory: $tmp_dir/$backup_dir"
+backup_dir_name="$current_time"
+backup_dir="$destination_dir/$backup_dir_name"
+echo_info "Attempting to create backup directory: $backup_dir"
 
-cd "$tmp_dir" || exit
-mkdir "$backup_dir"
+cd "$destination_dir" || exit
+mkdir "$backup_dir_name"
 
-if [ -d "$backup_dir" ]; then
-  echo_info "Backup Directory successfully created: $tmp_dir/$backup_dir"
+if [ -d "$backup_dir_name" ]; then
+  echo_info "Backup Directory successfully created: $backup_dir"
 else
-  echo_error "Backup Directory $tmp_dir/$backup_dir could not be created. Exiting."
+  echo_error "Backup Directory $backup_dir could not be created. Exiting."
   exit 1
 fi
 
@@ -114,20 +114,22 @@ fi
 for vault in "${vaults[@]}"
 do
    echo_info "Changing directory to backup directory: $backup_dir"
-   cd "$tmp_dir/$backup_dir" || exit
+   cd "$backup_dir" || exit
 
    echo_info "Creating directory for vault: $vault"
    mkdir "$vault"
 
-   if [ -d "$tmp_dir/$backup_dir/$vault" ]; then
-     echo_info "Vault Directory successfully created: $tmp_dir/$backup_dir/$vault"
+   vault_dir="$backup_dir/$vault"
+
+   if [ -d "$vault_dir" ]; then
+     echo_info "Vault Directory successfully created: $vault_dir"
    else
-     echo_error "Vault Directory $tmp_dir/$backup_dir/$vault could not be created. Exiting."
+     echo_error "Vault Directory $vault_dir could not be created. Exiting."
      exit 1
    fi
 
-   echo_info "Changing directory to vault: $tmp_dir/$backup_dir/$vault"
-   cd "$tmp_dir/$backup_dir/$vault" || exit
+   echo_info "Changing directory to vault: $vault_dir"
+   cd "$vault_dir" || exit
 
    echo_info "Fetching items for vault: $vault"
 
@@ -135,11 +137,8 @@ do
       echo_info "Fetching item for vault $vault with UUID: $uuid"
       touch "$uuid".json
       op item get "$uuid" --format json > "$uuid".json
-      echo_info "Saved information for item with UUID $uuid in: $tmp_dir/$backup_dir/$vault/$uuid.json"
+      echo_info "Saved information for item with UUID $uuid in: $vault_dir/$uuid.json"
    done
 done
 
-echo_info "Moving backup directory $tmp_dir/$backup_dir/ to $destination_dir"
-mv "$tmp_dir/$backup_dir" "$destination_dir/"
-
-echo_success "1Password vaults successfully backed up in $destination_dir/$backup_dir/"
+echo_success "1Password vaults successfully backed up in $backup_dir/"
